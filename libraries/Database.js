@@ -7,6 +7,7 @@ class Database {
       console.log('reusing existing database instance.');
       return Database.instance;
     }
+    console.log('creating new db instance.');
 
     this.connection = mysql.createConnection({
       host: process.env.DB_HOST,
