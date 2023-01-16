@@ -1,65 +1,28 @@
 require('log-timestamp');
-const MessagesHelper = require("./libraries/MessagesHelper");
+const MappingHelper = require('./libraries/MappingHelper');
 const OperatorsHelper = require("./libraries/OperatorsHelper");
 
 async function mappingRun(){
   let operators = OperatorsHelper.random(12);
-  let noPending = 0;
-
+  
   console.log('waiting', operators);
 
-  /* for (let index = 0; index < operators.length; index++) {
-    const operatorEl = operators[index];
-    const pendingMessages = await MessagesHelper.getPending(1);
+  for (const operatorEl of operators) {
+    MappingHelper.map(operatorEl);
 
-    if (pendingMessages.length) {
-      const pendingMessage = pendingMessages[0];
-      // console.log("pending message found", pendingMessage, "for", operatorEl);
-      await MessagesHelper.assignPending(pendingMessage.id, operatorEl);
-    } else
-      console.log('no pending messages found');
-  } */
-
-  for await (const operatorEl of operators) {
-    const pendingMessages = await MessagesHelper.getPending(1);
-
-    if (pendingMessages.length) {
-      const pendingMessage = pendingMessages[0];
-      // console.log("pending message found", pendingMessage, "for", operatorEl);
-      await MessagesHelper.assignPending(pendingMessage.id, operatorEl);
-    } else {
-      console.log('no pending messages found');
-      noPending++;
-
-      /**
-       * so that we could keep our model going, we release all 
-       * assigned messages
-       */
-      if (noPending > 1) {
-        noPending = 0;
-        await MessagesHelper.releaseAllMessages();
-      }
-    }
+    /**
+     * so that we could keep our model going, we release all 
+     * assigned messages
+     */
+    /* if (noPending > 1) {
+      noPending = 0;
+      await MessagesHelper.releaseAllMessages();
+    } */
   }
 
-  /* await operators.forEach(async operatorEl => {
-    const pendingMessages = await MessagesHelper.getPending(1);
-    
-    if(pendingMessages.length){
-      const pendingMessage = pendingMessages[0];
-      // console.log("pending message found", pendingMessage, "for", operatorEl);
-      await MessagesHelper.assignPending(pendingMessage.id, operatorEl);
-    }else
-      console.log('no pending messages found');
-  }); */
-
-  // console.log("covered all operators!");
-  // const pending = await MessagesHelper.getPending(1);
-  // console.log(pending);
-
-  setTimeout(async () => {
-    await mappingRun();
-  }, 5000);
+  // setTimeout(async () => {
+  //   await mappingRun();
+  // }, 5000);
 }
 
 mappingRun();
