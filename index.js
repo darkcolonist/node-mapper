@@ -2,12 +2,12 @@ require('log-timestamp');
 const MessagesHelper = require("./libraries/MessagesHelper");
 const OperatorsHelper = require("./libraries/OperatorsHelper");
 
-const operators = OperatorsHelper.random(12);
-let noPending = 0;
+async function mappingRun(){
+  let operators = OperatorsHelper.random(12);
+  let noPending = 0;
 
-console.log(operators);
+  console.log('waiting', operators);
 
-(async () => {
   /* for (let index = 0; index < operators.length; index++) {
     const operatorEl = operators[index];
     const pendingMessages = await MessagesHelper.getPending(1);
@@ -27,11 +27,15 @@ console.log(operators);
       const pendingMessage = pendingMessages[0];
       // console.log("pending message found", pendingMessage, "for", operatorEl);
       await MessagesHelper.assignPending(pendingMessage.id, operatorEl);
-    } else{
+    } else {
       console.log('no pending messages found');
       noPending++;
 
-      if(noPending > 1){
+      /**
+       * so that we could keep our model going, we release all 
+       * assigned messages
+       */
+      if (noPending > 1) {
         noPending = 0;
         await MessagesHelper.releaseAllMessages();
       }
@@ -49,9 +53,15 @@ console.log(operators);
       console.log('no pending messages found');
   }); */
 
-  console.log("covered all operators!");
+  // console.log("covered all operators!");
   // const pending = await MessagesHelper.getPending(1);
   // console.log(pending);
-})();
+
+  setTimeout(async () => {
+    await mappingRun();
+  }, 5000);
+}
+
+mappingRun();
 
 // console.log(MessagesHelper.getPending(1));
