@@ -26,5 +26,3 @@ async function mappingRun(){
 }
 
 mappingRun();
-
-// console.log(MessagesHelper.getPending(1));
